@@ -3,14 +3,13 @@ import re
 
 from os import listdir
 from os.path import isfile, join
+from pathlib import Path
+import os.path
 
-RAW_DATA_PATH = 'raw_data/solo_leveling'
+RAW_DATA_PATH = 'raw_data/attack_on_titan/'
 BUILD_PATH = 'build'
 TRANSLATIONS_FILE = f'{BUILD_PATH}/translations.csv'
 RAW_OUTPUT_FILE = f'{BUILD_PATH}/output.txt'
-
-
-
 
 def read_file(filepath):
     with open(filepath, 'r') as fd:
@@ -59,6 +58,9 @@ def is_a_word(token):
     return True
 
 def load_previous_translations():
+    if not os.path.isfile(TRANSLATIONS_FILE):
+        return list()
+
     translations = read_file(TRANSLATIONS_FILE)
 
     english_words = [line.split(";")[0] for line in translations]
@@ -83,6 +85,7 @@ def count_strings(message_list):
     return counts
 
 if __name__ == '__main__':
+    Path(BUILD_PATH).mkdir(parents=True, exist_ok=True)
     lines = read_files()
 
     words = ' '.join(lines)
